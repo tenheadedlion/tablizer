@@ -1,0 +1,224 @@
+chains:
+    - name: Phala
+      type: Substrate
+    - name: Khala
+      type: Substrate
+    - name: Ethereum
+      type: Ethereum
+    - name: Acala
+      type: Substrate
+    - name: Karara
+      type: Substrate
+    - name: Moonbeam
+      type: Substrate
+    - name: Karura
+      type: Substrate
+assets:
+    - chain: Ethereum
+      uid: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
+      symbol: USDC
+    - chain: Ethereum
+      uid: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
+      symbol: USDC
+    - chain: Ethereum
+      uid: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
+      symbol: WETH
+    - chain: Ethereum
+      uid: '0xb376b0ee6d8202721838e76376e81eec0e2fe864'
+      symbol: PHA
+    - chain: Moonbeam
+      uid: '0x818ec0a7fe18ff94269904fced6ae3dae6d6dc0b'
+      symbol: USDC
+    - chain: Moonbeam
+      uid: '0xacc15dc74880c9944775448304b263d191c6077f'
+      symbol: 'WGLMR'
+    - chain: Moonbeam
+      uid: '0xffffffff63d24ecc8eb8a7b5d0803e900f7b6ced'
+      symbol: PHA
+    - chain: Phala
+      uid: PHA
+      name: PHA
+      symbol: PHA
+      decimals: 12
+    - chain: Khala
+      uid: PHA
+      name: PHA
+      symbol: PHA
+      decimals: 12
+    - chain: Karura
+      uid: KUSD
+      name: KUSD
+      symbol: KUSD
+      decimals: 12
+    - chain: Karura
+      uid: 'KSM'
+      name: 'KSM'
+      symbol: 'KSM'
+      decimals: 12
+    - chain: Karura
+      uid: KAR
+      name: KAR
+      symbol: KAR
+      decimals: 12
+    - chain: Karura
+      uid: PHA
+      name: PHA
+      symbol: PHA
+      decimals: 12
+    - chain: Acala
+      uid: PHA
+      name: PHA
+      symbol: PHA
+      decimals: 12
+    - chain: Ethereum
+      uid: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
+      name: 'Wrapped Ether'
+      symbol: WETH
+      decimals: 18
+    - chain: Ethereum
+      uid: '0xb376b0ee6d8202721838e76376e81eec0e2fe864'
+      name: 'Phala Token'
+      symbol: PHA
+      decimals: 18
+    - chain: Moonbeam
+      uid: '0x818ec0a7fe18ff94269904fced6ae3dae6d6dc0b'
+      name: 'USD//C'
+      symbol: USDC
+      decimals: 18
+    - chain: Moonbeam
+      uid: '0xacc15dc74880c9944775448304b263d191c6077f'
+      name: Wrap GLMR
+      symbol: WGLMR
+      decimals: 18
+    - chain: Moonbeam
+      uid: '0xffffffff63d24ecc8eb8a7b5d0803e900f7b6ced'
+      name: xcPHA
+      symbol: PHA
+      decimals: 12
+    - chain: Phala
+      uid: PHA
+      name: PHA
+      symbol: PHA
+      decimals: 12
+    - chain: Khala
+      uid: PHA
+      name: PHA
+      symbol: PHA
+      decimals: 12
+    - chain: Karura
+      uid: KUSD
+      name: KUSD
+      symbol: KUSD
+      decimals: 12
+    - chain: Karura
+      uid: 'KSM'
+      name: 'KSM'
+      symbol: 'KSM'
+      decimals: 12
+    - chain: Karura
+      uid: KAR
+      name: KAR
+      symbol: KAR
+      decimals: 12
+    - chain: Karura
+      uid: PHA
+      name: PHA
+      symbol: PHA
+      decimals: 12
+    - chain: Acala
+      uid: PHA
+      name: PHA
+      symbol: PHA
+      decimals: 12
+dexs_indexers:
+    - name: UniSwapV2
+      indexers:
+        - https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2
+    - name: StellaSwap
+      indexers:
+        - https://api.thegraph.com/subgraphs/name/stellaswap/stella-swap
+    - name: BeamSwap
+      indexers:
+        - https://api.thegraph.com/subgraphs/name/beamswap/beamswap-dex
+    - name: KaruraDex
+      indexers:
+        - https://api.polkawallet.io/karura-dex-subql
+dex_pairs:
+    - asset0: USDC
+      asset1: WETH
+      chain: Ethereum
+      pid: '0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc'
+      dex: UniSwapV2
+    - asset0: PHA
+      asset1: WETH
+      chain: Ethereum
+      pid: '0x8867f20c1c63baccec7617626254a060eeb0e61e'
+      dex: UniSwapV2
+    - asset0: USDC
+      asset1: WGLMR
+      chain: Moonbeam
+      pid: '0x555b74dafc4ef3a5a1640041e3244460dc7610d1'
+      dex: StellaSwap
+    - asset0: USDC
+      asset1: WGLMR
+      chain: Moonbeam
+      pid: '0xb929914b89584b4081c7966ac6287636f7efd053'
+      dex: BeamSwap
+    - asset0: KUSD
+      asset1: KSM
+      pid: lp://KUSD/KSM
+      chain: Karura
+      dex: KaruraDex
+    - asset0: KAR
+      asset1: KSM
+      pid: lp://KAR/KSM
+      chain: Karara
+      dex: KaruraDex
+    - asset0: KAR
+      asset1: KUSD
+      pid: lp://KAR/KUSD
+      chain: Karara
+      dex: KaruraDex
+    - asset0: KUSD
+      asset1: PHA
+      pid: lp://KUSD/PHA
+      chain: Karara
+      dex: KararaDex
+bridge_pairs:
+    - asset0:
+        symbol: PHA
+        chain: Ethereum
+      asset1:
+        symbol: PHA
+        chain: Phala
+    - asset0:
+        symbol: PHA
+        chain: Ethereum
+      asset1:
+        symbol: PHA
+        chain: Khala
+    - asset0:
+        symbol: USDC
+        chain: Ethereum
+      asset1:
+        symbol: USDC
+        chain: Moonbeam
+    - asset0:
+        symbol: PHA
+        chain: Khala
+      asset1:
+        symbol: PHA
+        chain: Karura
+    - asset0:
+        symbol: PHA
+        chain: Khala
+      asset1:
+        symbol: PHA
+        chain: Acala
+    - asset0:
+        symbol: PHA
+        chain: Khala
+      asset1:
+        symbol: PHA
+        chain: Moonbeam
+    

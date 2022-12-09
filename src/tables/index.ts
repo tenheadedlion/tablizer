@@ -7,5 +7,8 @@ function parse(file: string): any {
 }
 
 export function parseConfig(filePath: string) {
-  console.log(parse(filePath));
+  const config = parse(filePath);
+  console.log(config);
+  const assets = config['assets'];
+  console.log(assets[0].symbol);
 }
