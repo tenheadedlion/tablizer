@@ -7,11 +7,9 @@ chains:
       type: Ethereum
     - name: Acala
       type: Substrate
-    - name: Karara
+    - name: Karura
       type: Substrate
     - name: Moonbeam
-      type: Substrate
-    - name: Karura
       type: Substrate
 assets:
     - chain: Ethereum
