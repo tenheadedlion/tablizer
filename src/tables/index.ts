@@ -34,6 +34,7 @@ function insertDB(record: Record<string, any>, dbPath: string) {
   const assets = record['assets'];
   insertChains(db, chains);
   insertAssets(db, assets);
+  exportDB(db);
   db.close();
 }
 
@@ -61,4 +62,11 @@ function insertAssets(db: any, assets: any) {
     const res = db.prepare(sql, [asset.chain]).get(asset.chain);
     stmt.run([asset.symbol, res.id]);
   }
+}
+
+function exportDB(db: any) {
+  const chains = db.prepare('SELECT * FROM chains').all();
+  console.log(chains);
+  const assets = db.prepare('SELECT * FROM assets').all();
+  console.log(assets);
 }
