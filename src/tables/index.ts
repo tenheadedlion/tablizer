@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs';
+import { readFileSync, unlinkSync, existsSync } from 'fs';
 import * as yaml from 'js-yaml';
 import * as Database from 'better-sqlite3';
 
@@ -25,6 +25,9 @@ export function parseConfig(filePath: string, dbPath: string) {
 }
 
 function insertDB(record: Record<string, any>, dbPath: string) {
+  if (existsSync(dbPath)) {
+    unlinkSync(dbPath);
+  }
   logger.info(`dbPath: ${dbPath}`);
   const db = new Database(dbPath, { verbose: console.log });
   const chains = record['chains'];
