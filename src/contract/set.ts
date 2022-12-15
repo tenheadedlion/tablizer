@@ -7,7 +7,7 @@ import '@polkadot/api-augment';
 import { types as PhalaSDKTypes } from '@phala/sdk';
 import { khalaDev as KhalaTypes } from '@phala/typedefs';
 
-export async function deploy() {
+export async function set() {
   const nodeUrl = 'ws://localhost:9944';
   const workerUrls = ['http://localhost:8000'];
 
