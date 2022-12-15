@@ -32,8 +32,10 @@ function insertDB(record: Record<string, any>, dbPath: string) {
   const db = new Database(dbPath, { verbose: console.log });
   const chains = record['chains'];
   const assets = record['assets'];
+  const dexs = record['dexs'];
   insertChains(db, chains);
   insertAssets(db, assets);
+  insertDexs(db, dexs);
   exportDB(db);
   db.close();
 }
@@ -64,9 +66,22 @@ function insertAssets(db: any, assets: any) {
   }
 }
 
+function insertDexs(db: any, dexs: any) {
+  db.exec(readFileSync(__dirname + '/sql/dexs.sql').toString());
+  const stmt = db.prepare('INSERT INTO dexs (name, chain_id) VALUES (?, ?)');
+  for (const dex of dexs) {
+    const sql = `SELECT id FROM chains WHERE name = ?`;
+    const chain = dex.chain;
+    const res = db.prepare(sql, [chain]).get(chain);
+    stmt.run([dex.name, res.id]);
+  }
+}
+
 function exportDB(db: any) {
   const chains = db.prepare('SELECT * FROM chains').all();
   console.log(chains);
   const assets = db.prepare('SELECT * FROM assets').all();
   console.log(assets);
+  const dexs = db.prepare('SELECT * FROM dexs').all();
+  console.log(dexs);
 }
