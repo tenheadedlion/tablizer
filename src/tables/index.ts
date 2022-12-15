@@ -1,6 +1,6 @@
 import { readFileSync, unlinkSync, existsSync } from 'fs';
 import * as yaml from 'js-yaml';
-import * as Database from 'better-sqlite3';
+import Database from 'better-sqlite3';
 
 import { createLogger, format, transports } from 'winston';
 
