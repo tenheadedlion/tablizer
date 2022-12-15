@@ -6,6 +6,7 @@ import { PRuntimeApi } from './pruntime';
 import '@polkadot/api-augment';
 import { types as PhalaSDKTypes } from '@phala/sdk';
 import { khalaDev as KhalaTypes } from '@phala/typedefs';
+import { join, resolve } from 'path';
 import {
   contractApi,
   estimateGas,
@@ -14,11 +15,11 @@ import {
   TxHandler,
 } from './commons';
 
-export async function set() {
-  const nodeUrl = 'ws://localhost:9944';
-  const workerUrls = ['http://localhost:8000'];
+export async function set(node: string, runtime: string, contractID: string) {
+  const nodeUrl = node;
+  const workerUrls = [runtime];
 
-  const contract = loadContractFile('./res/flipper.contract');
+  const contract = loadContractFile(join(__dirname, './res/registry.contract'));
 
   const wsProvider = new WsProvider(nodeUrl);
   const api = await ApiPromise.create({
@@ -45,12 +46,7 @@ export async function set() {
   const pruntimeURL = default_worker.url;
   console.log(`Connect to ${pruntimeURL} for query`);
 
-  const flipper = await contractApi(
-    api,
-    pruntimeURL,
-    contract,
-    '0xf156b3be0c6e18db4161f0c49e59e371c96fe534398a6b83a29de7615bc230d1',
-  );
+  const client = await contractApi(api, pruntimeURL, contract, contractID);
 
   const keyring = new Keyring({ type: 'sr25519' });
   const alice = keyring.addFromUri('//Alice');
@@ -59,8 +55,13 @@ export async function set() {
     pair: alice,
   });
 
-  const txConf = await estimateGas(flipper, 'flip', certAlice, []);
-  const tx = flipper.tx.flip(txConf);
+  const graph = {
+    assets: [{ id: 3, name: 'poirot' }],
+  };
+
+  const txConf = await estimateGas(client, 'setGraph', certAlice, [graph]);
+
+  const tx = client.tx.setGraph(txConf, graph);
   await TxHandler.handle(tx, alice);
 
   await api.disconnect();

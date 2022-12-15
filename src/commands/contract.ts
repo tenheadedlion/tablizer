@@ -18,20 +18,21 @@ export default class Contract extends Command {
   public async run(): Promise<void> {
     const { flags } = await this.parse(Contract);
 
+    const node = flags.node ?? `ws://localhost:9944`;
+    const runtime = flags.runtime ?? `http://localhost:8000`;
+    const address =
+      flags.address ??
+      `0xe8c5dda5c369a160662c85f90d0e72fbc0969f61256f5851bf5da08713cf27ca`;
+
     if (flags.get && flags.set) {
       this.log('can not set flag "get" and "save" at the same time');
       return;
     } else if (flags.get) {
       this.log(`get graph`);
-      const node = flags.node ?? `ws://localhost:9944`;
-      const runtime = flags.runtime ?? `http://localhost:8000`;
-      const address =
-        flags.address ??
-        `0xf156b3be0c6e18db4161f0c49e59e371c96fe534398a6b83a29de7615bc230d1`;
       get(node, runtime, address);
     } else if (flags.set) {
       this.log(`set graph`);
-      set();
+      set(node, runtime, address);
     } else {
       this.log('Neither set nor get, exiting...');
     }

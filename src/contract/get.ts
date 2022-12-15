@@ -13,7 +13,7 @@ export async function get(node: string, runtime: string, contractID: string) {
   const nodeUrl = node;
   const workerUrls = [runtime];
 
-  const contract = loadContractFile(join(__dirname, './res/flipper.contract'));
+  const contract = loadContractFile(join(__dirname, './res/registry.contract'));
 
   const wsProvider = new WsProvider(nodeUrl);
   const api = await ApiPromise.create({
@@ -40,7 +40,7 @@ export async function get(node: string, runtime: string, contractID: string) {
   const pruntimeURL = default_worker.url;
   console.log(`Connect to ${pruntimeURL} for query`);
 
-  const flipper = await contractApi(api, pruntimeURL, contract, contractID);
+  const client = await contractApi(api, pruntimeURL, contract, contractID);
 
   const keyring = new Keyring({ type: 'sr25519' });
   const alice = keyring.addFromUri('//Alice');
@@ -49,7 +49,10 @@ export async function get(node: string, runtime: string, contractID: string) {
     pair: alice,
   });
 
-  const res = await flipper.query['get'](certAlice as unknown as string, {});
+  const res = await client.query['getGraph'](
+    certAlice as unknown as string,
+    {},
+  );
   console.log(`result: ${res.output}`);
 
   await api.disconnect();
