@@ -33,9 +33,11 @@ function insertDB(record: Record<string, any>, dbPath: string) {
   const chains = record['chains'];
   const assets = record['assets'];
   const dexs = record['dexs'];
+  const dex_indexers = record['dex_indexers'];
   insertChains(db, chains);
   insertAssets(db, assets);
   insertDexs(db, dexs);
+  insertDexIndexers(db, dex_indexers);
   exportDB(db);
   db.close();
 }
@@ -77,6 +79,21 @@ function insertDexs(db: any, dexs: any) {
   }
 }
 
+function insertDexIndexers(db: any, dex_indexers: any) {
+  db.exec(readFileSync(__dirname + '/sql/dex_indexers.sql').toString());
+  const stmt = db.prepare(
+    'INSERT INTO dex_indexers (url, dex_id) VALUES (?, ?)',
+  );
+  for (const indexer_list of dex_indexers) {
+    const sql = `SELECT id FROM dexs WHERE name = ?`;
+    const dex = indexer_list.name;
+    const res = db.prepare(sql, [dex]).get(dex);
+    for (const indexer of indexer_list.indexers) {
+      stmt.run([indexer, res.id]);
+    }
+  }
+}
+
 function exportDB(db: any) {
   const chains = db.prepare('SELECT * FROM chains').all();
   console.log(chains);
@@ -84,4 +101,6 @@ function exportDB(db: any) {
   console.log(assets);
   const dexs = db.prepare('SELECT * FROM dexs').all();
   console.log(dexs);
+  const dex_indexers = db.prepare('SELECT * FROM dex_indexers').all();
+  console.log(dex_indexers);
 }

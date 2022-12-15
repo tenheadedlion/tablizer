@@ -137,7 +137,7 @@ dexs:
       chain: Moonbeam
     - name: KaruraDex
       chain: Karura
-dexs_indexers:
+dex_indexers:
     - name: UniSwapV2
       indexers:
         - https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2
