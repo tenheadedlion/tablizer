@@ -6,6 +6,13 @@ import { PRuntimeApi } from './pruntime';
 import '@polkadot/api-augment';
 import { types as PhalaSDKTypes } from '@phala/sdk';
 import { khalaDev as KhalaTypes } from '@phala/typedefs';
+import {
+  contractApi,
+  estimateGas,
+  hex,
+  loadContractFile,
+  TxHandler,
+} from './commons';
 
 export async function set() {
   const nodeUrl = 'ws://localhost:9944';
@@ -38,8 +45,6 @@ export async function set() {
   const pruntimeURL = default_worker.url;
   console.log(`Connect to ${pruntimeURL} for query`);
 
-  console.log(`contract: ${contract}`);
-
   const flipper = await contractApi(
     api,
     pruntimeURL,
@@ -54,49 +59,9 @@ export async function set() {
     pair: alice,
   });
 
-  const res = await flipper.query['get'](certAlice as unknown as string, {});
-  console.log(`result: ${res.output}`);
+  const txConf = await estimateGas(flipper, 'flip', certAlice, []);
+  const tx = flipper.tx.flip(txConf);
+  await TxHandler.handle(tx, alice);
 
   await api.disconnect();
-}
-
-async function contractApi(
-  api: any,
-  pruntimeUrl: any,
-  contract: any,
-  contractID: string,
-) {
-  const { api: workerApi } = await PhalaSdk.create({
-    api,
-    baseURL: pruntimeUrl,
-    contractId: contractID,
-    autoDeposit: true,
-  });
-  const contractApi = new ContractPromise(
-    <any>workerApi,
-    contract.metadata,
-    contractID,
-  );
-  return contractApi;
-}
-
-function hex(b: any) {
-  if (typeof b != 'string') {
-    b = Buffer.from(b).toString('hex');
-  }
-  if (!b.startsWith('0x')) {
-    return '0x' + b;
-  } else {
-    return b;
-  }
-}
-
-function loadContractFile(contractFile: string) {
-  const metadata = JSON.parse(fs.readFileSync(contractFile, 'utf8'));
-  const constructor = metadata.V3.spec.constructors.find(
-    (c: any) => c.label == 'default',
-  ).selector;
-  const name = metadata.contract.name;
-  const wasm = metadata.source.wasm;
-  return { wasm, metadata, constructor, name };
 }

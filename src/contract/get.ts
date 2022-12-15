@@ -6,12 +6,14 @@ import { PRuntimeApi } from './pruntime';
 import '@polkadot/api-augment';
 import { types as PhalaSDKTypes } from '@phala/sdk';
 import { khalaDev as KhalaTypes } from '@phala/typedefs';
+import { join, resolve } from 'path';
+import { contractApi, hex, loadContractFile } from './commons';
 
 export async function get(node: string, runtime: string, contractID: string) {
   const nodeUrl = node;
   const workerUrls = [runtime];
 
-  const contract = loadContractFile('./res/flipper.contract');
+  const contract = loadContractFile(join(__dirname, './res/flipper.contract'));
 
   const wsProvider = new WsProvider(nodeUrl);
   const api = await ApiPromise.create({
@@ -38,8 +40,6 @@ export async function get(node: string, runtime: string, contractID: string) {
   const pruntimeURL = default_worker.url;
   console.log(`Connect to ${pruntimeURL} for query`);
 
-  console.log(`contract: ${contract}`);
-
   const flipper = await contractApi(api, pruntimeURL, contract, contractID);
 
   const keyring = new Keyring({ type: 'sr25519' });
@@ -53,45 +53,4 @@ export async function get(node: string, runtime: string, contractID: string) {
   console.log(`result: ${res.output}`);
 
   await api.disconnect();
-}
-
-async function contractApi(
-  api: any,
-  pruntimeUrl: any,
-  contract: any,
-  contractID: string,
-) {
-  const { api: workerApi } = await PhalaSdk.create({
-    api,
-    baseURL: pruntimeUrl,
-    contractId: contractID,
-    autoDeposit: true,
-  });
-  const contractApi = new ContractPromise(
-    <any>workerApi,
-    contract.metadata,
-    contractID,
-  );
-  return contractApi;
-}
-
-function hex(b: any) {
-  if (typeof b != 'string') {
-    b = Buffer.from(b).toString('hex');
-  }
-  if (!b.startsWith('0x')) {
-    return '0x' + b;
-  } else {
-    return b;
-  }
-}
-
-function loadContractFile(contractFile: string) {
-  const metadata = JSON.parse(fs.readFileSync(contractFile, 'utf8'));
-  const constructor = metadata.V3.spec.constructors.find(
-    (c: any) => c.label == 'default',
-  ).selector;
-  const name = metadata.contract.name;
-  const wasm = metadata.source.wasm;
-  return { wasm, metadata, constructor, name };
 }

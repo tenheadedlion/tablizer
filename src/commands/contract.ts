@@ -18,7 +18,7 @@ export default class Contract extends Command {
   public async run(): Promise<void> {
     const { flags } = await this.parse(Contract);
 
-    if (flags.get && flags.save) {
+    if (flags.get && flags.set) {
       this.log('can not set flag "get" and "save" at the same time');
       return;
     } else if (flags.get) {
@@ -29,7 +29,7 @@ export default class Contract extends Command {
         flags.address ??
         `0xf156b3be0c6e18db4161f0c49e59e371c96fe534398a6b83a29de7615bc230d1`;
       get(node, runtime, address);
-    } else if (flags.save) {
+    } else if (flags.set) {
       this.log(`set graph`);
       set();
     } else {
