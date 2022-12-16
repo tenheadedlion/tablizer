@@ -1,5 +1,5 @@
 CREATE TABLE chains (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT,
-    type INTEGER
+    chain_type INTEGER
 )

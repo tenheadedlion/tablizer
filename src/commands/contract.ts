@@ -1,6 +1,9 @@
 import { Command, Flags } from '@oclif/core';
 import { get } from '../contract/get';
 import { set } from '../contract/set';
+import { join, resolve } from 'path';
+
+const SQLITE3_FILENAME = 'db.sqlite';
 
 export default class Contract extends Command {
   static description = 'contract deployment and invocation';
@@ -11,6 +14,7 @@ export default class Contract extends Command {
     runtime: Flags.string({ char: 'r', description: 'runtime endpoint' }),
     node: Flags.string({ char: 'n', description: 'node endpoint' }),
     address: Flags.string({ char: 'a', description: 'contract address' }),
+    database: Flags.string({ char: 'd', description: 'database file path' }),
     set: Flags.boolean({ description: 'save data to the registry contract' }),
     get: Flags.boolean({ description: 'get data from the registry contract' }),
   };
@@ -22,7 +26,9 @@ export default class Contract extends Command {
     const runtime = flags.runtime ?? `http://localhost:8000`;
     const address =
       flags.address ??
-      `0xe8c5dda5c369a160662c85f90d0e72fbc0969f61256f5851bf5da08713cf27ca`;
+      `0x60779b44edd3dae58522b5ab8287cf7a48ee031eb70ffdf8a7be1ba8126dcfab`;
+    const db =
+      flags.database ?? join(resolve(__dirname, '../..'), SQLITE3_FILENAME);
 
     if (flags.get && flags.set) {
       this.log('can not set flag "get" and "save" at the same time');
@@ -32,7 +38,7 @@ export default class Contract extends Command {
       get(node, runtime, address);
     } else if (flags.set) {
       this.log(`set graph`);
-      set(node, runtime, address);
+      set(node, runtime, address, db);
     } else {
       this.log('Neither set nor get, exiting...');
     }

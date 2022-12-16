@@ -7,6 +7,7 @@ import '@polkadot/api-augment';
 import { types as PhalaSDKTypes } from '@phala/sdk';
 import { khalaDev as KhalaTypes } from '@phala/typedefs';
 import { join, resolve } from 'path';
+import { exportGraph } from '../tables/index';
 import {
   contractApi,
   estimateGas,
@@ -15,7 +16,12 @@ import {
   TxHandler,
 } from './commons';
 
-export async function set(node: string, runtime: string, contractID: string) {
+export async function set(
+  node: string,
+  runtime: string,
+  contractID: string,
+  dbPath: string,
+) {
   const nodeUrl = node;
   const workerUrls = [runtime];
 
@@ -55,9 +61,8 @@ export async function set(node: string, runtime: string, contractID: string) {
     pair: alice,
   });
 
-  const graph = {
-    assets: [{ id: 3, name: 'poirot' }],
-  };
+  const graph = exportGraph(dbPath);
+  console.log(graph);
 
   const txConf = await estimateGas(client, 'setGraph', certAlice, [graph]);
 

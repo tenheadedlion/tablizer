@@ -53,7 +53,7 @@ export async function get(node: string, runtime: string, contractID: string) {
     certAlice as unknown as string,
     {},
   );
-  console.log(`result: ${res.output}`);
+  console.log(res.output?.toJSON());
 
   await api.disconnect();
 }

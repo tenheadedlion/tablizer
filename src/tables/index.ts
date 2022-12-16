@@ -50,7 +50,9 @@ function insertDB(record: Record<string, any>, dbPath: string) {
 
 function insertChains(db: any, chains: any) {
   db.exec(readFileSync(__dirname + '/sql/chains.sql').toString());
-  const stmt = db.prepare('INSERT INTO chains (name, type) VALUES (?, ?)');
+  const stmt = db.prepare(
+    'INSERT INTO chains (name, chain_type) VALUES (?, ?)',
+  );
   for (const chain of chains) {
     let type = 0;
     if (chain.type === 'Ethereum') {
@@ -151,19 +153,44 @@ function insertBridgePairs(db: any, bridgePairs: any) {
   }
 }
 
-function exportDB(db: any) {
+export interface Graph {
+  chains: Array<any>;
+  assets: Array<any>;
+  dexs: Array<any>;
+  dex_pairs: Array<any>;
+  dex_indexers: Array<any>;
+  bridges: Array<any>;
+  bridge_pairs: Array<any>;
+}
+
+function exportDB(db: any): Graph {
   const chains = db.prepare('SELECT * FROM chains').all();
   console.log(chains);
   const assets = db.prepare('SELECT * FROM assets').all();
   console.log(assets);
   const dexs = db.prepare('SELECT * FROM dexs').all();
   console.log(dexs);
-  const dexIndexers = db.prepare('SELECT * FROM dex_indexers').all();
-  console.log(dexIndexers);
-  const dexPairs = db.prepare('SELECT * FROM dex_pairs').all();
-  console.log(dexPairs);
+  const dex_indexers = db.prepare('SELECT * FROM dex_indexers').all();
+  console.log(dex_indexers);
+  const dex_pairs = db.prepare('SELECT * FROM dex_pairs').all();
+  console.log(dex_pairs);
   const bridges = db.prepare('SELECT * FROM bridges').all();
   console.log(bridges);
-  const bridgePairs = db.prepare('SELECT * FROM bridge_pairs').all();
-  console.log(bridgePairs);
+  const bridge_pairs = db.prepare('SELECT * FROM bridge_pairs').all();
+  console.log(bridge_pairs);
+  return {
+    chains,
+    assets,
+    dexs,
+    dex_pairs,
+    dex_indexers,
+    bridges,
+    bridge_pairs,
+  };
+}
+
+export function exportGraph(dbPath: string): Graph {
+  logger.info(`dbPath: ${dbPath}`);
+  const db = new Database(dbPath, { verbose: console.log });
+  return exportDB(db);
 }
