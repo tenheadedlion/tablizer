@@ -154,43 +154,43 @@ dex_pairs:
     - asset0: USDC
       asset1: WETH
       chain: Ethereum
-      pid: '0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc'
+      pair_id: '0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc'
       dex: UniSwapV2
     - asset0: PHA
       asset1: WETH
       chain: Ethereum
-      pid: '0x8867f20c1c63baccec7617626254a060eeb0e61e'
+      pair_id: '0x8867f20c1c63baccec7617626254a060eeb0e61e'
       dex: UniSwapV2
     - asset0: USDC
       asset1: WGLMR
       chain: Moonbeam
-      pid: '0x555b74dafc4ef3a5a1640041e3244460dc7610d1'
+      pair_id: '0x555b74dafc4ef3a5a1640041e3244460dc7610d1'
       dex: StellaSwap
     - asset0: USDC
       asset1: WGLMR
       chain: Moonbeam
-      pid: '0xb929914b89584b4081c7966ac6287636f7efd053'
+      pair_id: '0xb929914b89584b4081c7966ac6287636f7efd053'
       dex: BeamSwap
     - asset0: KUSD
       asset1: KSM
-      pid: lp://KUSD/KSM
+      pair_id: lp://KUSD/KSM
       chain: Karura
       dex: KaruraDex
     - asset0: KAR
       asset1: KSM
-      pid: lp://KAR/KSM
-      chain: Karara
+      pair_id: lp://KAR/KSM
+      chain: Karura
       dex: KaruraDex
     - asset0: KAR
       asset1: KUSD
-      pid: lp://KAR/KUSD
-      chain: Karara
+      pair_id: lp://KAR/KUSD
+      chain: Karura
       dex: KaruraDex
     - asset0: KUSD
       asset1: PHA
-      pid: lp://KUSD/PHA
-      chain: Karara
-      dex: KararaDex
+      pair_id: lp://KUSD/PHA
+      chain: Karura
+      dex: KaruraDex
 bridge_pairs:
     - asset0:
         symbol: PHA
@@ -198,34 +198,40 @@ bridge_pairs:
       asset1:
         symbol: PHA
         chain: Phala
+      bridge: Ethereum2Phala
     - asset0:
         symbol: PHA
         chain: Ethereum
       asset1:
         symbol: PHA
         chain: Khala
-    - asset0:
-        symbol: USDC
-        chain: Ethereum
-      asset1:
-        symbol: USDC
-        chain: Moonbeam
+      bridge: Ethereum2Khala
     - asset0:
         symbol: PHA
         chain: Khala
       asset1:
         symbol: PHA
         chain: Karura
-    - asset0:
-        symbol: PHA
-        chain: Khala
-      asset1:
-        symbol: PHA
-        chain: Acala
+      bridge: Khala2Karura
     - asset0:
         symbol: PHA
         chain: Khala
       asset1:
         symbol: PHA
         chain: Moonbeam
-    
+      bridge: Khala2Moonbeam
+bridges:
+  - name: Phala2Ethereum
+    location: xtransfer
+  - name: Khala2Ethereum
+    location: xtransfer
+  - name: Ethereum2Phala
+    location: '0x000'
+  - name: Ethereum2Khala
+    location: '0x000'
+  - name: Phala2Moonbeam
+    location: xtransfer
+  - name: Khala2Moonbeam
+    location: xtransfer
+  - name: Khala2Karura
+    location: xtransfer

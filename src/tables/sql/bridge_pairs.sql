@@ -4,7 +4,7 @@ CREATE TABLE bridge_pairs (
     asset1_id INTEGER,
     bridge_id INTEGER,
 
-    FOREIGN KEY(asset0_id) REFERENCES assets(id),
-    FOREIGN KEY(asset1_id) REFERENCES assets(id),
-    FOREIGN KEY(bridge_id) REFERENCES bridges(id),
+    FOREIGN KEY(asset0_id) REFERENCES assets(id)
+    FOREIGN KEY(asset1_id) REFERENCES assets(id)
+    FOREIGN KEY(bridge_id) REFERENCES bridges(id)
 )
