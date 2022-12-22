@@ -26,7 +26,7 @@ export default class Contract extends Command {
     const runtime = flags.runtime ?? `http://localhost:8000`;
     const address =
       flags.address ??
-      `0x60779b44edd3dae58522b5ab8287cf7a48ee031eb70ffdf8a7be1ba8126dcfab`;
+      `0x5374e93b68b40e3800785044e09a83a8502794516308597da6063c8bca46f3c9`;
     const db =
       flags.database ?? join(resolve(__dirname, '../..'), SQLITE3_FILENAME);
 

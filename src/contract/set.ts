@@ -55,7 +55,7 @@ export async function set(
   const client = await contractApi(api, pruntimeURL, contract, contractID);
 
   const keyring = new Keyring({ type: 'sr25519' });
-  const alice = keyring.addFromUri('//Alice');
+  const alice = keyring.addFromUri('//Bob');
   const certAlice = await PhalaSdk.signCertificate({
     api: api,
     pair: alice,

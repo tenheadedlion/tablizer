@@ -49,10 +49,7 @@ export async function get(node: string, runtime: string, contractID: string) {
     pair: alice,
   });
 
-  const res = await client.query['getGraph'](
-    certAlice as unknown as string,
-    {},
-  );
+  const res = await client.query.getGraph(certAlice as unknown as string, {});
   console.log(res.output?.toJSON());
 
   await api.disconnect();

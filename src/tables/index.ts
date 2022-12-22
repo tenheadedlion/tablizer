@@ -3,6 +3,7 @@ import * as yaml from 'js-yaml';
 import Database from 'better-sqlite3';
 
 import { createLogger, format, transports } from 'winston';
+import { stringToHex } from '@polkadot/util';
 
 const logger = createLogger({
   transports: [new transports.Console()],
@@ -64,15 +65,35 @@ function insertChains(db: any, chains: any) {
   }
 }
 
+// special care should be taken in regard to assets
+// if asset name is null, set it to asset symbol
+// if asset decimals is null, set it to zero
+// if location is null, set it to asset symbol
 function insertAssets(db: any, assets: any) {
   db.exec(readFileSync(__dirname + '/sql/assets.sql').toString());
   const stmt = db.prepare(
-    'INSERT INTO assets (symbol, chain_id) VALUES (?, ?)',
+    'INSERT INTO assets (symbol, chain_id, name, location, decimals) VALUES (?, ?, ?, ?, ?)',
   );
   for (const asset of assets) {
     const sql = `SELECT id FROM chains WHERE name = ?`;
     const res = db.prepare(sql).get(asset.chain);
-    stmt.run([asset.symbol, res.id]);
+    if (asset.name === undefined) {
+      asset.name = asset.symbol;
+    }
+    if (asset.location === undefined) {
+      asset.location = asset.symbol;
+    }
+    if (asset.decimals === undefined) {
+      asset.decimals = 0;
+    }
+    asset.location = stringToHex(asset.location).slice(2);
+    stmt.run([
+      asset.symbol,
+      res.id,
+      asset.name,
+      asset.location,
+      asset.decimals,
+    ]);
   }
 }
 
@@ -119,7 +140,20 @@ function insertDexPairs(db: any, dexPairs: any) {
     const res1 = db.prepare(sql).get(symbol1, chain);
     const sql2 = `SELECT id FROM dexs WHERE name = ?`;
     const dex = db.prepare(sql2).get(pair.dex);
-    stmt.run([res0.asset_id, res1.asset_id, dex.id, pair.pair_id]);
+
+    // we convert string to hex string due to the fact that
+    // ink has special treatment for strings.
+    // any string that starts with 0x is considered as hex string, others strings remain as
+    // character strings(utf-8 by default).
+    //
+    // to get around with such weird conversion, we have to make a special encoding
+    // scheme for our data, that is to convert some fields to hex string.
+    // in js programming, we must remove the 0x prefix, otherwise ink! again will parse it like
+    // hex string
+    //
+    // https://github.com/polkadot-js/common/tree/master/packages/util/src
+    const pairIdAsHex = stringToHex(pair.pair_id).slice(2);
+    stmt.run([res0.asset_id, res1.asset_id, dex.id, pairIdAsHex]);
   }
 }
 
