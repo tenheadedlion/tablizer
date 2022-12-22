@@ -1,5 +1,5 @@
 import { Command, Flags } from '@oclif/core';
-import { parseConfig } from '../tables';
+import { parseConfig } from '../tables/insert-table';
 import { join, resolve } from 'path';
 
 const YAML_CONFIG_FILENAME = 'resources.yaml';

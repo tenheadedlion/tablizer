@@ -1,9 +1,8 @@
 import { readFileSync, unlinkSync, existsSync } from 'fs';
 import * as yaml from 'js-yaml';
 import Database from 'better-sqlite3';
-
 import { createLogger, format, transports } from 'winston';
-import { stringToHex } from '@polkadot/util';
+import { indexHexFunc } from './encoding';
 
 const logger = createLogger({
   transports: [new transports.Console()],
@@ -86,7 +85,7 @@ function insertAssets(db: any, assets: any) {
     if (asset.decimals === undefined) {
       asset.decimals = 0;
     }
-    asset.location = stringToHex(asset.location).slice(2);
+    asset.location = indexHexFunc(asset.location);
     stmt.run([
       asset.symbol,
       res.id,
@@ -141,18 +140,7 @@ function insertDexPairs(db: any, dexPairs: any) {
     const sql2 = `SELECT id FROM dexs WHERE name = ?`;
     const dex = db.prepare(sql2).get(pair.dex);
 
-    // we convert string to hex string due to the fact that
-    // ink has special treatment for strings.
-    // any string that starts with 0x is considered as hex string, others strings remain as
-    // character strings(utf-8 by default).
-    //
-    // to get around with such weird conversion, we have to make a special encoding
-    // scheme for our data, that is to convert some fields to hex string.
-    // in js programming, we must remove the 0x prefix, otherwise ink! again will parse it like
-    // hex string
-    //
-    // https://github.com/polkadot-js/common/tree/master/packages/util/src
-    const pairIdAsHex = stringToHex(pair.pair_id).slice(2);
+    const pairIdAsHex = indexHexFunc(pair.pair_id);
     stmt.run([res0.asset_id, res1.asset_id, dex.id, pairIdAsHex]);
   }
 }
@@ -161,7 +149,8 @@ function insertBridges(db: any, bridges: any) {
   db.exec(readFileSync(__dirname + '/sql/bridges.sql').toString());
   const stmt = db.prepare('INSERT INTO bridges (name, location) VALUES (?, ?)');
   for (const bridge of bridges) {
-    stmt.run([bridge.name, bridge.location]);
+    const location = indexHexFunc(bridge.location);
+    stmt.run([bridge.name, location]);
   }
 }
 

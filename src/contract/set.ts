@@ -7,7 +7,7 @@ import '@polkadot/api-augment';
 import { types as PhalaSDKTypes } from '@phala/sdk';
 import { khalaDev as KhalaTypes } from '@phala/typedefs';
 import { join, resolve } from 'path';
-import { exportGraph } from '../tables/index';
+import { exportGraph } from '../tables/insert-table';
 import {
   contractApi,
   estimateGas,
