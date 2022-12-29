@@ -51,7 +51,7 @@ function insertDB(record: Record<string, any>, dbPath: string) {
 function insertChains(db: any, chains: any) {
   db.exec(readFileSync(__dirname + '/sql/chains.sql').toString());
   const stmt = db.prepare(
-    'INSERT INTO chains (name, chain_type) VALUES (?, ?)',
+    'INSERT INTO chains (name, chain_type, endpoint) VALUES (?, ?, ?)',
   );
   for (const chain of chains) {
     let type = 0;
@@ -60,7 +60,7 @@ function insertChains(db: any, chains: any) {
     } else if (chain.type === 'Substrate') {
       type = 2;
     }
-    stmt.run([chain.name, type]);
+    stmt.run([chain.name, type, chain.endpoint]);
   }
 }
 

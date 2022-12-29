@@ -1,16 +1,22 @@
 chains:
     - name: Phala
       type: Substrate
+      endpoint: https://api.phala.network/ws
     - name: Khala
       type: Substrate
+      endpoint: https://khala-api.phala.network/ws
     - name: Ethereum
       type: Ethereum
+      endpoint: https://mainnet.infura.io/v3/6d61e7957c1c489ea8141e947447405b
     - name: Acala
       type: Substrate
+      endpoint: https://acala-rpc.dwellir.com
     - name: Karura
       type: Substrate
+      endpoint: https://karura-rpc.dwellir.com
     - name: Moonbeam
       type: Substrate
+      endpoint: https://moonbeam.api.onfinality.io/public
 assets:
     - chain: Ethereum
       location: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
